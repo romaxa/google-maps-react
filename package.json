@@ -81,5 +81,8 @@
     "react": "~0.14.8 || ^15.0.0 || ^16.0.0",
     "react-dom": "~0.14.8 || ^15.0.0 || ^16.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@deck.gl/core": "^7.3.2",
+    "@deck.gl/google-maps": "^7.3.2"
+  }
 }
