@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import { GoogleMapsOverlay as DeckOverlay } from '@deck.gl/google-maps';
 import {camelize} from './lib/String';
 import {makeCancelable} from './lib/cancelablePromise';
 
@@ -123,6 +124,9 @@ export class Map extends React.Component {
     Object.keys(this.listeners).forEach(e => {
       google.maps.event.removeListener(this.listeners[e]);
     });
+    if (this.overlay) {
+      this.overlay.finalize();
+    }
   }
 
   loadMap() {
@@ -165,7 +169,8 @@ export class Map extends React.Component {
           disableDoubleClickZoom: this.props.disableDoubleClickZoom,
           noClear: this.props.noClear,
           styles: this.props.styles,
-          gestureHandling: this.props.gestureHandling
+          gestureHandling: this.props.gestureHandling,
+          deckLayers: this.props.deckLayers,
         }
       );
 
@@ -177,6 +182,10 @@ export class Map extends React.Component {
       });
 
       this.map = new maps.Map(node, mapConfig);
+      this.overlay = new DeckOverlay({
+        layers: this.props.deckLayers || []
+      });
+      this.overlay.setMap(this.map);
 
       evtNames.forEach(e => {
         this.listeners[e] = this.map.addListener(e, this.handleEvent(e));
@@ -299,7 +308,8 @@ Map.propTypes = {
   noClear: PropTypes.bool,
   styles: PropTypes.array,
   gestureHandling: PropTypes.string,
-  bounds: PropTypes.object
+  bounds: PropTypes.object,
+  deckLayers: PropTypes.array,
 };
 
 evtNames.forEach(e => (Map.propTypes[camelize(e)] = PropTypes.func));

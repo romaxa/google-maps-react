@@ -1,16 +1,16 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(['exports', './GoogleApiComponent', './components/Marker', './components/InfoWindow', './components/HeatMap', './components/Polygon', './components/Polyline', './components/Circle', 'react', 'prop-types', 'react-dom', './lib/String', './lib/cancelablePromise'], factory);
+    define(['exports', './GoogleApiComponent', './components/Marker', './components/InfoWindow', './components/HeatMap', './components/Polygon', './components/Polyline', './components/Circle', 'react', 'prop-types', 'react-dom', '@deck.gl/google-maps', './lib/String', './lib/cancelablePromise'], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports, require('./GoogleApiComponent'), require('./components/Marker'), require('./components/InfoWindow'), require('./components/HeatMap'), require('./components/Polygon'), require('./components/Polyline'), require('./components/Circle'), require('react'), require('prop-types'), require('react-dom'), require('./lib/String'), require('./lib/cancelablePromise'));
+    factory(exports, require('./GoogleApiComponent'), require('./components/Marker'), require('./components/InfoWindow'), require('./components/HeatMap'), require('./components/Polygon'), require('./components/Polyline'), require('./components/Circle'), require('react'), require('prop-types'), require('react-dom'), require('@deck.gl/google-maps'), require('./lib/String'), require('./lib/cancelablePromise'));
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.GoogleApiComponent, global.Marker, global.InfoWindow, global.HeatMap, global.Polygon, global.Polyline, global.Circle, global.react, global.propTypes, global.reactDom, global.String, global.cancelablePromise);
+    factory(mod.exports, global.GoogleApiComponent, global.Marker, global.InfoWindow, global.HeatMap, global.Polygon, global.Polyline, global.Circle, global.react, global.propTypes, global.reactDom, global.googleMaps, global.String, global.cancelablePromise);
     global.index = mod.exports;
   }
-})(this, function (exports, _GoogleApiComponent, _Marker, _InfoWindow, _HeatMap, _Polygon, _Polyline, _Circle, _react, _propTypes, _reactDom, _String, _cancelablePromise) {
+})(this, function (exports, _GoogleApiComponent, _Marker, _InfoWindow, _HeatMap, _Polygon, _Polyline, _Circle, _react, _propTypes, _reactDom, _googleMaps, _String, _cancelablePromise) {
   'use strict';
 
   Object.defineProperty(exports, "__esModule", {
@@ -222,6 +222,9 @@
         Object.keys(this.listeners).forEach(function (e) {
           google.maps.event.removeListener(_this3.listeners[e]);
         });
+        if (this.overlay) {
+          this.overlay.finalize();
+        }
       }
     }, {
       key: 'loadMap',
@@ -266,7 +269,8 @@
             disableDoubleClickZoom: this.props.disableDoubleClickZoom,
             noClear: this.props.noClear,
             styles: this.props.styles,
-            gestureHandling: this.props.gestureHandling
+            gestureHandling: this.props.gestureHandling,
+            deckLayers: this.props.deckLayers
           });
 
           Object.keys(mapConfig).forEach(function (key) {
@@ -277,6 +281,10 @@
           });
 
           this.map = new maps.Map(node, mapConfig);
+          this.overlay = new _googleMaps.GoogleMapsOverlay({
+            layers: this.props.deckLayers || []
+          });
+          this.overlay.setMap(this.map);
 
           evtNames.forEach(function (e) {
             _this4.listeners[e] = _this4.map.addListener(e, _this4.handleEvent(e));
@@ -412,7 +420,8 @@
     noClear: _propTypes2.default.bool,
     styles: _propTypes2.default.array,
     gestureHandling: _propTypes2.default.string,
-    bounds: _propTypes2.default.object
+    bounds: _propTypes2.default.object,
+    deckLayers: _propTypes2.default.array
   };
 
   evtNames.forEach(function (e) {
