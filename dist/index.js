@@ -208,6 +208,11 @@
         if (this.props.bounds && this.props.bounds !== prevProps.bounds) {
           this.map.fitBounds(this.props.bounds);
         }
+        if (this.overlay) {
+          if (prevProps.deckLayers !== this.props.deckLayers) {
+            this.overlay.setProps({ layers: this.props.deckLayers });
+          }
+        }
       }
     }, {
       key: 'componentWillUnmount',
