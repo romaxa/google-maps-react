@@ -9,6 +9,11 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@deck.gl/google-maps@^7.3.2":
+  version "7.3.3"
+  resolved "https://unpm.uberinternal.com/@deck.gl%2fgoogle-maps/-/google-maps-7.3.3.tgz#d20ce46c356533c4c9f19ee0cb79983d1f1f750d"
+  integrity sha1-0gzkbDVlM8TJ8Z7gy3mYPR8fdQ0=
+
 "@types/googlemaps@^3":
   version "3.37.7"
   resolved "https://unpm.uberinternal.com/@types%2fgooglemaps/-/googlemaps-3.37.7.tgz#224cc94fecfc6cb1be95b7f03ec50218ef8a5deb"
