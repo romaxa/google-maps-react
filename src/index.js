@@ -298,7 +298,7 @@ Map.propTypes = {
   zoomControl: PropTypes.bool,
   zoomControlOptions: PropTypes.object,
   mapTypeControl: PropTypes.bool,
-  mapTypeControlOptions: PropTypes.bool,
+  mapTypeControlOptions: PropTypes.object,
   scaleControl: PropTypes.bool,
   streetViewControl: PropTypes.bool,
   streetViewControlOptions: PropTypes.object,
